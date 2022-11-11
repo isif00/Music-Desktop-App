@@ -1,9 +1,8 @@
 import youtube_dl
 import os 
 
-def download_ytvid_as_mp3():
-    video_url = input("enter url of youtube video: ")
-    video_info = youtube_dl.YoutubeDL().extract_info(url = video_url,download=False)
+def download_ytvid_as_mp3(video_url):
+    video_info = youtube_dl.YoutubeDL().extract_info(url = video_url, download=False)
     filename = f"{video_info['title']}.mp3"
     options={
         'format':'bestaudio/best',
