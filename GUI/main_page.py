@@ -1,8 +1,10 @@
-import sys
+from Music_downloader.downloader import download_ytvid_as_mp3
+from pathlib import Path
 
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import *
 
+import validators
 
 class DownloadWindow(QWidget):
     def __init__(self):
@@ -18,24 +20,38 @@ class DownloadWindow(QWidget):
         layout.addWidget(self.input, alignment= Qt.AlignmentFlag.AlignCenter)
  
         button = QPushButton("Download")
-        button.clicked.connect(self.get)
+        button.clicked.connect(self.on_download_pressed)
         layout.addWidget(button)
  
         button = QPushButton("Clear")
         button.clicked.connect(self.input.clear)
         layout.addWidget(button)
- 
-    def get(self):
+
+    def open_dir_dialog(self):
+        dir_name = QFileDialog.getExistingDirectory(self, "Select a Directory")
+        if dir_name:
+            path = Path(dir_name)
+            self.dir_name_edit.setText(str(path))
+
+    def on_download_pressed(self):
         link = self.input.text()
-        print(link)
+        if not validators.url(f"{link}"):
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle("Invalid Link")
+            dlg.setText("Invalid Link try again!")
+            button = dlg.exec()
+            if button == QMessageBox.StandardButton.Ok:
+                self.input.clear()
+        else:
+            path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+            if path != ('', ''):
+                print(path)
+
+            download_ytvid_as_mp3(link)
 
 
 
 
 app = QApplication([])
-
 window = DownloadWindow()
-
 window.show()
-
-app.exec()

@@ -1,8 +1,10 @@
+from GUI.main_page import app
+from Music_downloader.downloader import curr_path
 import os
-from Music_downloader.downloader import download_ytvid_as_mp3 as ytb
-from GUI.main_page import window
 
+if os.path.exists(f"{curr_path}/MyDownloadedMusic"):
+    pass
+else:
+    os.mkdir("MyDownloadedMusic")
 
-if __name__ == '__main__':
-    ytb.download_ytvid_as_mp3(window.get())
-
+app.exec()

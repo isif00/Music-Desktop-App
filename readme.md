@@ -6,5 +6,5 @@
 	- fast
 
 ## Tools 
-	- pyqt5
+	- pyqt6
 	- youtube-dl library

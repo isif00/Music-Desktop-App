@@ -1,5 +1,5 @@
 import youtube_dl
-import os 
+import os
 
 def download_ytvid_as_mp3(video_url):
     video_info = youtube_dl.YoutubeDL().extract_info(url = video_url, download=False)
@@ -7,7 +7,7 @@ def download_ytvid_as_mp3(video_url):
     options={
         'format':'bestaudio/best',
         'keepvideo':False,
-        'outtmpl':filename,
+        'outtmpl':f'{curr_path}/MyDownloadedMusic/{filename}',
     }
 
     with youtube_dl.YoutubeDL(options) as ydl:
@@ -15,3 +15,5 @@ def download_ytvid_as_mp3(video_url):
 
     print("Download complete... {}".format(filename))
 
+curr_path = os.getcwd()
+print(curr_path)
