@@ -1,10 +1,9 @@
 from Music_downloader.downloader import download_ytvid_as_mp3
 from pathlib import Path
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import *
-
 import validators
+
 
 class DownloadWindow(QWidget):
     def __init__(self):
@@ -45,9 +44,9 @@ class DownloadWindow(QWidget):
         else:
             path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
             if path != ('', ''):
-                print(path)
+                curr_path = path
 
-            download_ytvid_as_mp3(link)
+            download_ytvid_as_mp3(link, curr_path)
 
 
 
