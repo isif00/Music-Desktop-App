@@ -9,4 +9,5 @@
 ## Tools 
 	- pyqt6
 	- youtube-dl library
+	- validators
 	
