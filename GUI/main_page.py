@@ -1,12 +1,14 @@
-from Music_downloader.downloader import download_ytvid_as_mp3
+from Music_downloader.downloader import WorkerThread
 from pathlib import Path
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 import validators
 
 
 class DownloadWindow(QWidget):
     def __init__(self):
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
         super().__init__()
         self.setFixedSize(600, 300)
         self.setWindowTitle("Music APP")
@@ -16,15 +18,23 @@ class DownloadWindow(QWidget):
  
         self.input = QLineEdit()
         self.input.setFixedWidth(250)
-        layout.addWidget(self.input, alignment= Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.input, alignment = Qt.AlignmentFlag.AlignCenter)
+
  
         button = QPushButton("Download")
         button.clicked.connect(self.on_download_pressed)
         layout.addWidget(button)
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(150, 175, 300, 25)
+        self.progress_bar.setValue(0)
+
  
         button = QPushButton("Clear")
         button.clicked.connect(self.input.clear)
         layout.addWidget(button)
+
+
 
     def open_dir_dialog(self):
         dir_name = QFileDialog.getExistingDirectory(self, "Select a Directory")
@@ -46,7 +56,17 @@ class DownloadWindow(QWidget):
             if path != ('', ''):
                 curr_path = path
 
-            download_ytvid_as_mp3(link, curr_path)
+                self.worker_thread = WorkerThread()
+                self.worker_thread.progress_update.connect(self.update_progress)
+                self.worker_thread.set_var(link, curr_path)
+                self.worker_thread.start()
+
+    @pyqtSlot(int)
+    def update_progress(self, value):
+        self.progress_bar.setValue(value)
+
+
+            
 
 
 
