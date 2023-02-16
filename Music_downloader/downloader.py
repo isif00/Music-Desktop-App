@@ -18,9 +18,18 @@ class WorkerThread(QThread):
         self.curr_path = curr_path
 
     def run(self):
-        for i in range(101):
-            self.progress_update.emit(i)
-            self.download_ytvid_as_mp3(self.link, self.curr_path)
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'progress_hooks': [self.update_progress_bar],
+            'outtmpl': f'{self.curr_path}/%(title)s.%(ext)s',
+        }
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([self.link])
+
+    def update_progress_bar(self, status):
+        percent = status.get('percent', 0)
+        self.progress_update.emit(int(float(percent)))
+
 
 
     def download_ytvid_as_mp3(self, video_url, curr_path):

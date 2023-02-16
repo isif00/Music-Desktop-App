@@ -66,10 +66,6 @@ class DownloadWindow(QWidget):
         self.progress_bar.setValue(value)
 
 
-            
-
-
-
 
 app = QApplication([])
 window = DownloadWindow()
